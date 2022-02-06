@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { IWidgetTree } from "../class/IWidgetTree";
 import { WidgetTreeItem } from "../components/WidgetTreeItem";
 
 export const useHover = (
-	widgets: WidgetTreeItem[]
+	widget: IWidgetTree
 ): [
 	(
 		| (WidgetTreeItem & {
@@ -26,29 +27,36 @@ export const useHover = (
 		})[]
 	>([]);
 	useEffect(() => {
-		setWidgetsWithListeners(
-			widgets.map((widget) => {
-				return {
-					...widget,
-					onMouseEnter: () => {
-						setShowHoverFor(widget.ID);
-					},
-					onMouseLeave: () => {
-						setShowHoverFor(undefined);
-					},
-					onMouseDown: () => {
-						console.log("mouseDown called");
-						setShowHoverFor(undefined);
-						setShowSelectedFor(widget.ID);
-						const upListener = () => {
-							setShowSelectedFor(undefined);
-							window.removeEventListener("mouseup", upListener);
+		widget.subscribeWidgetTree({
+			next: (widgets) => {
+				setWidgetsWithListeners(
+					widgets.map((widget) => {
+						return {
+							...widget,
+							onMouseEnter: () => {
+								setShowHoverFor(widget.ID);
+							},
+							onMouseLeave: () => {
+								setShowHoverFor(undefined);
+							},
+							onMouseDown: () => {
+								console.log("mouseDown called");
+								setShowHoverFor(undefined);
+								setShowSelectedFor(widget.ID);
+								const upListener = () => {
+									setShowSelectedFor(undefined);
+									window.removeEventListener(
+										"mouseup",
+										upListener
+									);
+								};
+								window.addEventListener("mouseup", upListener);
+							},
 						};
-						window.addEventListener("mouseup", upListener);
-					},
-				};
-			})
-		);
+					})
+				);
+			},
+		});
 	}, [setShowHoverFor, setWidgetsWithListeners, setShowSelectedFor]);
 	return [widgetsWithListeners, showHoverFor, showSelectedFor];
 };

@@ -77,17 +77,17 @@ export class WidgetTree implements IWidgetTree {
 			},
 		];
 		const parentChildMap = {
-			"1": [{ child: "2", index: 2 }],
+			"1": [{ child: "2", index: 1 }],
 			"2": [
-				{ child: "3", index: 3 },
-				{ child: "4", index: 4 },
+				{ child: "3", index: 2 },
+				{ child: "4", index: 3 },
 			],
-			"4": [{ child: "5", index: 5 }],
+			"4": [{ child: "5", index: 4 }],
 		};
 		return [widgets, parentChildMap];
 	}
 	// subscribe for widgets
-	subscribeWidgetTree(observer: Observer<WidgetTreeItem[]>) {
+	subscribeWidgetTree(observer: Partial<Observer<WidgetTreeItem[]>>) {
 		return this.subject.subscribe(observer);
 	}
 	// rewiring node from one point to another
@@ -96,17 +96,21 @@ export class WidgetTree implements IWidgetTree {
 		// remove below code once connected with DesignRuntime
 		console.error("rewire not implemented");
 	}
-	private _markDisplay(widgetID: string, value: boolean) {
-		this.parentChildMap[widgetID].map((child) => {
-			this.widgets[child.index].shouldDisplay = value;
-			this._markDisplay(child.child, value);
-		});
+	private _markDisplay(widget: WidgetTreeItem, value: boolean) {
+		if (this.parentChildMap[widget.ID]) {
+			this.parentChildMap[widget.ID].map((child) => {
+				console.log(child.index);
+				this.widgets[child.index].shouldDisplay = value;
+				if (widget.hasChild && widget.isExpanded)
+					this._markDisplay(this.widgets[child.index], value);
+			});
+		}
 	}
 	expandNode(widgetID: string) {
 		this.widgets.forEach((widget) => {
 			if (widget.ID === widgetID) {
+				this._markDisplay(widget, true);
 				widget.isExpanded = true;
-				this._markDisplay(widgetID, true);
 			}
 		});
 		// re-publish with updates
@@ -116,7 +120,7 @@ export class WidgetTree implements IWidgetTree {
 		this.widgets.forEach((widget) => {
 			if (widget.ID === widgetID) {
 				widget.isExpanded = false;
-				this._markDisplay(widgetID, false);
+				this._markDisplay(widget, false);
 			}
 		});
 		// re-publish with updates

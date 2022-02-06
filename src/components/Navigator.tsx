@@ -14,6 +14,7 @@ import { useHover } from "../hooks/useHover";
 import { DropIcon } from "./DropIcon";
 import { WidgetTreeItem } from "./WidgetTreeItem";
 import { IWidgetTree } from "../class/IWidgetTree";
+import { ClosedIcon } from "./ClosedIcon";
 
 const maxControlsWidth = "40px";
 
@@ -60,7 +61,7 @@ export interface NavigatorProps {
 
 export const Navigator: React.FC<NavigatorProps> = (props) => {
 	const [widgetsWithListeners, showHoverFor, showSelectedFor] = useHover(
-		props.widgetTree.widgets
+		props.widgetTree
 	);
 	const getLineColor = useCallback(
 		(widgetID: string) => {
@@ -93,6 +94,12 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 		},
 		[widgetsWithListeners]
 	);
+	const getIcon = useCallback((widget: WidgetTreeItem) => {
+		if (widget.isExpanded) {
+			return DropIcon;
+		}
+		return ClosedIcon;
+	}, []);
 	return (
 		<div style={styles.navigator}>
 			<Header />
@@ -139,8 +146,18 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 												? [
 														{
 															name: "drop",
-															icon: DropIcon,
-															onClick: () => {},
+															icon: getIcon(
+																widget
+															),
+															onClick: () => {
+																widget.isExpanded
+																	? props.widgetTree.unexpandNode(
+																			widget.ID
+																	  )
+																	: props.widgetTree.expandNode(
+																			widget.ID
+																	  );
+															},
 														},
 												  ]
 												: []
