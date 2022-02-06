@@ -31,6 +31,7 @@ export class WidgetTree implements IWidgetTree {
 		return widgetID;
 	}
 	moveLeft(widgetID: string, ticks: number): string {
+		console.log("moving left with ticks", ticks, widgetID);
 		return this._moveLeft(widgetID, ticks);
 	}
 	get widgets() {

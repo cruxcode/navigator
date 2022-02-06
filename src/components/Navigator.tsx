@@ -119,6 +119,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 											onMouseEnter={widget.onMouseEnter}
 											onMouseLeave={widget.onMouseLeave}
 											onMouseDown={widget.onMouseDown}
+											onMouseMove={widget.onMouseMove}
 											key={widget.ID}
 											showLineColor={getLineColor(
 												widget.ID

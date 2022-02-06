@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { spacing10, spacing25 } from "../consts";
 import { Underline } from "./Underline";
 
@@ -9,6 +9,7 @@ export interface ElementProps {
 	onMouseEnter: () => void;
 	onMouseLeave: () => void;
 	onMouseDown: () => void;
+	onMouseMove: MouseEventHandler;
 	background: string;
 	showLineColor: string;
 	opacity: string;
@@ -40,7 +41,7 @@ export const style: { [key: string]: React.CSSProperties } = {
 };
 
 export const Element: React.FC<ElementProps> = React.memo((props) => {
-	console.log(`rendered ${props.name}`);
+	// console.log(`rendered ${props.name}`);
 	return (
 		<div
 			style={{
@@ -52,6 +53,7 @@ export const Element: React.FC<ElementProps> = React.memo((props) => {
 			onMouseEnter={props.onMouseEnter}
 			onMouseLeave={props.onMouseLeave}
 			onMouseDown={props.onMouseDown}
+			onMouseMove={props.onMouseMove}
 		>
 			<div style={{ ...style.img }}>
 				<props.icon />
