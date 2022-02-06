@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import "./App.css";
+import { WidgetTree } from "./class/WidgetTree";
 import { Navigator } from "./components/Navigator";
 
 function App() {
+	const widgetTree = useRef(new WidgetTree());
 	return (
 		<div className="App" style={{ height: "100vh" }}>
-			<Navigator />
+			<Navigator widgetTree={widgetTree.current} />
 		</div>
 	);
 }

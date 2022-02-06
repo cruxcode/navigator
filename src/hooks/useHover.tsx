@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WidgetTreeItem } from "./WidgetTreeItem";
+import { WidgetTreeItem } from "../components/WidgetTreeItem";
 
 export const useHover = (
 	widgets: WidgetTreeItem[]

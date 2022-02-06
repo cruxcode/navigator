@@ -10,10 +10,10 @@ import {
 import { Header } from "./Header";
 import { Element } from "./Element";
 import { Controls } from "./Controls";
-import { RectIcon } from "./RectIcon";
-import { useHover } from "./useHover";
+import { useHover } from "../hooks/useHover";
 import { DropIcon } from "./DropIcon";
 import { WidgetTreeItem } from "./WidgetTreeItem";
+import { WidgetTree } from "../class/WidgetTree";
 
 const maxControlsWidth = "40px";
 
@@ -54,59 +54,14 @@ function calcSpacing(tabs: number) {
 	return parseFloat(spacing20) * tabs + "rem";
 }
 
-const widgets: WidgetTreeItem[] = [
-	{
-		name: "Body",
-		ID: "1",
-		icon: RectIcon,
-		leftMargin: calcSpacing(1),
-		hasChild: true,
-		isExpanded: true,
-	},
-	{
-		name: "Div Block 1",
-		ID: "2",
-		icon: RectIcon,
-		leftMargin: calcSpacing(2),
-		hasChild: true,
-		isExpanded: true,
-	},
-	{
-		name: "Text Block 1",
-		ID: "3",
-		icon: RectIcon,
-		leftMargin: calcSpacing(3),
-		hasChild: false,
-		isExpanded: false,
-	},
-	{
-		name: "Div Block 2",
-		ID: "4",
-		icon: RectIcon,
-		leftMargin: calcSpacing(3),
-		hasChild: true,
-		isExpanded: true,
-	},
-	{
-		name: "Text Block 3",
-		ID: "5",
-		icon: RectIcon,
-		leftMargin: calcSpacing(4),
-		hasChild: false,
-		isExpanded: false,
-	},
-];
+export interface NavigatorProps {
+	widgetTree: WidgetTree;
+}
 
-// shouldDisplay - for identifying whether to render a element
-// all the children of a node with isExpanded false will have shouldDisplay false
-// isLastChild - for identifying whether to allow left movement
-// nodeLevel - for calculating left margin
-// isPreviousSiblingAParent - for identifying whether to allow right movement
-// isPreviousSublingAParent && isPreviousSibling isExpanded set to true
-
-export const Navigator: React.FC = () => {
-	const [widgetsWithListeners, showHoverFor, showSelectedFor] =
-		useHover(widgets);
+export const Navigator: React.FC<NavigatorProps> = (props) => {
+	const [widgetsWithListeners, showHoverFor, showSelectedFor] = useHover(
+		props.widgetTree.widgets
+	);
 	const getLineColor = useCallback(
 		(widgetID: string) => {
 			return showHoverFor === widgetID && showSelectedFor ? amber300 : "";
@@ -145,48 +100,60 @@ export const Navigator: React.FC = () => {
 				<div style={styles.main}>
 					<div style={styles.elements}>
 						{widgetsWithListeners.map((widget) => {
-							return (
-								<div>
-									<Element
-										name={widget.name}
-										icon={widget.icon}
-										leftMargin={widget.leftMargin}
-										onMouseEnter={widget.onMouseEnter}
-										onMouseLeave={widget.onMouseLeave}
-										onMouseDown={widget.onMouseDown}
-										key={widget.ID}
-										showLineColor={getLineColor(widget.ID)}
-										leftLinePadding={getLinePadding(widget)}
-										background={getBackground(widget.ID)}
-										opacity={reduceOpacity(widget.ID)}
-									></Element>
-								</div>
-							);
+							if (widget.shouldDisplay)
+								return (
+									<div>
+										<Element
+											name={widget.name}
+											icon={widget.icon}
+											leftMargin={calcSpacing(
+												widget.nodeLevel
+											)}
+											onMouseEnter={widget.onMouseEnter}
+											onMouseLeave={widget.onMouseLeave}
+											onMouseDown={widget.onMouseDown}
+											key={widget.ID}
+											showLineColor={getLineColor(
+												widget.ID
+											)}
+											leftLinePadding={getLinePadding(
+												widget
+											)}
+											background={getBackground(
+												widget.ID
+											)}
+											opacity={reduceOpacity(widget.ID)}
+										></Element>
+									</div>
+								);
+							else return null;
 						})}
 					</div>
 					<div style={styles.controls}>
 						{widgetsWithListeners.map((widget) => {
-							return (
-								<Controls
-									controls={
-										widget.hasChild
-											? [
-													{
-														name: "drop",
-														icon: DropIcon,
-														onClick: () => {},
-													},
-											  ]
-											: []
-									}
-									key={widget.ID}
-									onMouseEnter={widget.onMouseEnter}
-									onMouseLeave={widget.onMouseLeave}
-									background={getBackground(widget.ID)}
-									showLineColor={getLineColor(widget.ID)}
-									opacity={reduceOpacity(widget.ID)}
-								/>
-							);
+							if (widget.shouldDisplay)
+								return (
+									<Controls
+										controls={
+											widget.hasChild
+												? [
+														{
+															name: "drop",
+															icon: DropIcon,
+															onClick: () => {},
+														},
+												  ]
+												: []
+										}
+										key={widget.ID}
+										onMouseEnter={widget.onMouseEnter}
+										onMouseLeave={widget.onMouseLeave}
+										background={getBackground(widget.ID)}
+										showLineColor={getLineColor(widget.ID)}
+										opacity={reduceOpacity(widget.ID)}
+									/>
+								);
+							else return null;
 						})}
 					</div>
 				</div>
