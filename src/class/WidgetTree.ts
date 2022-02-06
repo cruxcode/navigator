@@ -96,21 +96,24 @@ export class WidgetTree implements IWidgetTree {
 		// remove below code once connected with DesignRuntime
 		console.error("rewire not implemented");
 	}
-	private _markDisplay(widget: WidgetTreeItem, value: boolean) {
-		if (this.parentChildMap[widget.ID]) {
-			this.parentChildMap[widget.ID].map((child) => {
-				console.log(child.index);
+	private _markDisplay(widgetID: string, value: boolean) {
+		if (this.parentChildMap[widgetID]) {
+			this.parentChildMap[widgetID].map((child) => {
 				this.widgets[child.index].shouldDisplay = value;
-				if (widget.hasChild && widget.isExpanded)
-					this._markDisplay(this.widgets[child.index], value);
+				if (
+					this.widgets[child.index].hasChild &&
+					this.widgets[child.index].isExpanded
+				)
+					this._markDisplay(child.child, value);
 			});
 		}
 	}
 	expandNode(widgetID: string) {
 		this.widgets.forEach((widget) => {
 			if (widget.ID === widgetID) {
-				this._markDisplay(widget, true);
+				// order of setting isExpanded and marking shouldDisplay is important
 				widget.isExpanded = true;
+				this._markDisplay(widgetID, true);
 			}
 		});
 		// re-publish with updates
@@ -119,8 +122,9 @@ export class WidgetTree implements IWidgetTree {
 	unexpandNode(widgetID: string) {
 		this.widgets.forEach((widget) => {
 			if (widget.ID === widgetID) {
+				// order of setting isExpanded and marking shouldDisplay is important
+				this._markDisplay(widgetID, false);
 				widget.isExpanded = false;
-				this._markDisplay(widget, false);
 			}
 		});
 		// re-publish with updates
