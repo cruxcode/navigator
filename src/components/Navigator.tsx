@@ -13,6 +13,7 @@ import { Controls } from "./Controls";
 import { RectIcon } from "./RectIcon";
 import { useHover } from "./useHover";
 import { DropIcon } from "./DropIcon";
+import { WidgetTreeItem } from "./WidgetTreeItem";
 
 const maxControlsWidth = "40px";
 
@@ -53,13 +54,14 @@ function calcSpacing(tabs: number) {
 	return parseFloat(spacing20) * tabs + "rem";
 }
 
-const widgets = [
+const widgets: WidgetTreeItem[] = [
 	{
 		name: "Body",
 		ID: "1",
 		icon: RectIcon,
 		leftMargin: calcSpacing(1),
 		hasChild: true,
+		isExpanded: true,
 	},
 	{
 		name: "Div Block 1",
@@ -67,6 +69,7 @@ const widgets = [
 		icon: RectIcon,
 		leftMargin: calcSpacing(2),
 		hasChild: true,
+		isExpanded: true,
 	},
 	{
 		name: "Text Block 1",
@@ -74,6 +77,7 @@ const widgets = [
 		icon: RectIcon,
 		leftMargin: calcSpacing(3),
 		hasChild: false,
+		isExpanded: false,
 	},
 	{
 		name: "Div Block 2",
@@ -81,6 +85,7 @@ const widgets = [
 		icon: RectIcon,
 		leftMargin: calcSpacing(3),
 		hasChild: true,
+		isExpanded: true,
 	},
 	{
 		name: "Text Block 3",
@@ -88,8 +93,16 @@ const widgets = [
 		icon: RectIcon,
 		leftMargin: calcSpacing(4),
 		hasChild: false,
+		isExpanded: false,
 	},
 ];
+
+// shouldDisplay - for identifying whether to render a element
+// all the children of a node with isExpanded false will have shouldDisplay false
+// isLastChild - for identifying whether to allow left movement
+// nodeLevel - for calculating left margin
+// isPreviousSiblingAParent - for identifying whether to allow right movement
+// isPreviousSublingAParent && isPreviousSibling isExpanded set to true
 
 export const Navigator: React.FC = () => {
 	const [widgetsWithListeners, showHoverFor, showSelectedFor] =
@@ -116,6 +129,15 @@ export const Navigator: React.FC = () => {
 		},
 		[showHoverFor, showSelectedFor]
 	);
+	const getLinePadding = useCallback(
+		(widget: WidgetTreeItem) => {
+			if (widget.hasChild && widget.isExpanded) {
+				return spacing20;
+			}
+			return "0px";
+		},
+		[widgetsWithListeners]
+	);
 	return (
 		<div style={styles.navigator}>
 			<Header />
@@ -134,6 +156,7 @@ export const Navigator: React.FC = () => {
 										onMouseDown={widget.onMouseDown}
 										key={widget.ID}
 										showLineColor={getLineColor(widget.ID)}
+										leftLinePadding={getLinePadding(widget)}
 										background={getBackground(widget.ID)}
 										opacity={reduceOpacity(widget.ID)}
 									></Element>

@@ -1,26 +1,15 @@
 import { useEffect, useState } from "react";
+import { WidgetTreeItem } from "./WidgetTreeItem";
 
 export const useHover = (
-	widgets: {
-		name: string;
-		icon: React.FC<{}>;
-		leftMargin: string;
-		ID: string;
-		hasChild: boolean;
-	}[]
+	widgets: WidgetTreeItem[]
 ): [
 	(
-		| {
-				name: string;
-				icon: React.FC<{}>;
-				leftMargin: string;
-				ID: string;
-				hasChild: boolean;
+		| (WidgetTreeItem & {
 				onMouseEnter: () => void;
 				onMouseLeave: () => void;
 				onMouseDown: () => void;
-		  }[]
-		| undefined
+		  })[]
 	),
 	string | undefined,
 	string | undefined
@@ -30,17 +19,12 @@ export const useHover = (
 		string | undefined
 	>();
 	const [widgetsWithListeners, setWidgetsWithListeners] = useState<
-		{
-			name: string;
-			icon: React.FC<{}>;
-			leftMargin: string;
-			ID: string;
-			hasChild: boolean;
+		(WidgetTreeItem & {
 			onMouseEnter: () => void;
 			onMouseLeave: () => void;
 			onMouseDown: () => void;
-		}[]
-	>();
+		})[]
+	>([]);
 	useEffect(() => {
 		setWidgetsWithListeners(
 			widgets.map((widget) => {

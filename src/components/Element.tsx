@@ -12,6 +12,7 @@ export interface ElementProps {
 	background: string;
 	showLineColor: string;
 	opacity: string;
+	leftLinePadding: string;
 }
 
 export const style: { [key: string]: React.CSSProperties } = {
@@ -58,7 +59,7 @@ export const Element: React.FC<ElementProps> = React.memo((props) => {
 			<div style={style.name}>{props.name}</div>
 			<Underline
 				showLineColor={props.showLineColor}
-				width={`calc(100% - ${props.leftMargin})`}
+				width={`calc(100% - ${props.leftMargin} - ${props.leftLinePadding})`}
 			/>
 		</div>
 	);
