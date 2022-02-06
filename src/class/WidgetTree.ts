@@ -1,9 +1,10 @@
 import { RectIcon } from "../components/RectIcon";
 import { WidgetTreeItem } from "../components/WidgetTreeItem";
 import { BehaviorSubject, Observer } from "rxjs";
+import { IWidgetTree } from "./IWidgetTree";
 type ParentChildMap = { [parent: string]: { child: string; index: number }[] };
 // interfaces with DesignRuntime
-export class WidgetTree {
+export class WidgetTree implements IWidgetTree {
 	private subject: BehaviorSubject<WidgetTreeItem[]>;
 	private parentChildMap: ParentChildMap;
 	constructor() {

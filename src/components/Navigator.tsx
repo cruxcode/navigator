@@ -13,7 +13,7 @@ import { Controls } from "./Controls";
 import { useHover } from "../hooks/useHover";
 import { DropIcon } from "./DropIcon";
 import { WidgetTreeItem } from "./WidgetTreeItem";
-import { WidgetTree } from "../class/WidgetTree";
+import { IWidgetTree } from "../class/IWidgetTree";
 
 const maxControlsWidth = "40px";
 
@@ -55,7 +55,7 @@ function calcSpacing(tabs: number) {
 }
 
 export interface NavigatorProps {
-	widgetTree: WidgetTree;
+	widgetTree: IWidgetTree;
 }
 
 export const Navigator: React.FC<NavigatorProps> = (props) => {
