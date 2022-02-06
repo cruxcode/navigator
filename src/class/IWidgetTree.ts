@@ -9,4 +9,12 @@ export interface IWidgetTree {
 	rewire(widgetID: string, parentID: string): void;
 	expandNode(widgetID: string): void;
 	unexpandNode(widgetID: string): void;
+	/**
+	 *
+	 * @param widgetID ID of the widget on which mouse is currently being hovered
+	 * @param ticks number of steps to take in right/left direction
+	 * @returns widget ID of the new parent
+	 */
+	moveRight(widgetID: string, ticks: number): string;
+	moveLeft(widgetID: string, ticks: number): string;
 }

@@ -9,10 +9,10 @@ export type WidgetTreeItem = {
 	name: string;
 	ID: string;
 	icon: React.FC<{}>;
+	parentID: string;
 	nodeLevel: number;
 	hasChild: boolean;
 	isExpanded: boolean;
 	shouldDisplay: boolean;
 	isLastChild: boolean;
-	isPreviousSiblingAnExpandedParent: boolean;
 };

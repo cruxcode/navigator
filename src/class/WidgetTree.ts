@@ -12,6 +12,27 @@ export class WidgetTree implements IWidgetTree {
 		this.subject = new BehaviorSubject<WidgetTreeItem[]>(widgets);
 		this.parentChildMap = parentChildMap;
 	}
+	moveRight(widgetID: string, ticks: number): string {
+		throw new Error("Method not implemented.");
+	}
+	private _moveLeft(widgetID: string, ticks: number): string {
+		if (ticks === 0) {
+			return widgetID;
+		}
+		const widget = this.widgets.find((widget) => {
+			if (widget.ID === widgetID) {
+				return true;
+			}
+			return false;
+		});
+		if (widget?.isLastChild) {
+			return this._moveLeft(widget.parentID, ticks - 1);
+		}
+		return widgetID;
+	}
+	moveLeft(widgetID: string, ticks: number): string {
+		return this._moveLeft(widgetID, ticks);
+	}
 	get widgets() {
 		return this.subject.value;
 	}
@@ -23,57 +44,57 @@ export class WidgetTree implements IWidgetTree {
 			{
 				name: "Body",
 				ID: "1",
+				parentID: "",
 				icon: RectIcon,
 				nodeLevel: 1,
 				hasChild: true,
 				isExpanded: true,
 				shouldDisplay: true,
 				isLastChild: false,
-				isPreviousSiblingAnExpandedParent: false,
 			},
 			{
 				name: "Div Block 1",
 				ID: "2",
 				icon: RectIcon,
+				parentID: "1",
 				nodeLevel: 2,
 				hasChild: true,
 				isExpanded: true,
 				shouldDisplay: true,
-				isLastChild: false,
-				isPreviousSiblingAnExpandedParent: false,
+				isLastChild: true,
 			},
 			{
 				name: "Text Block 1",
 				ID: "3",
 				icon: RectIcon,
+				parentID: "2",
 				nodeLevel: 3,
 				hasChild: false,
 				isExpanded: false,
 				shouldDisplay: true,
 				isLastChild: false,
-				isPreviousSiblingAnExpandedParent: true,
 			},
 			{
 				name: "Div Block 2",
 				ID: "4",
 				icon: RectIcon,
+				parentID: "2",
 				nodeLevel: 3,
 				hasChild: true,
 				isExpanded: true,
 				shouldDisplay: true,
-				isLastChild: false,
-				isPreviousSiblingAnExpandedParent: true,
+				isLastChild: true,
 			},
 			{
 				name: "Text Block 3",
 				ID: "5",
 				icon: RectIcon,
+				parentID: "4",
 				nodeLevel: 4,
 				hasChild: false,
 				isExpanded: false,
 				shouldDisplay: true,
-				isLastChild: false,
-				isPreviousSiblingAnExpandedParent: true,
+				isLastChild: true,
 			},
 		];
 		const parentChildMap = {
