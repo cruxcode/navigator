@@ -44,10 +44,13 @@ export const useHover = (
 						let currStartX: number | undefined;
 						let currStartY: number | undefined;
 						let ticks: number = widget.leftMoves;
+						// code for opening a parent widget
+						// amount of time the cursor must hover over a parent
+						const minHoverTime = 750;
+						let hoverTimer: any = undefined;
 						return {
 							...widget,
 							onMouseEnter: () => {
-								console.log("mouseEnter called");
 								moveStartTime = undefined;
 								moveStartX = undefined;
 								moveStartY = undefined;
@@ -55,9 +58,24 @@ export const useHover = (
 								if (widget.leftMoves !== 0)
 									widgetTree.setLeftMoves(widget.ID, 0);
 								setShowHoverFor(widget.ID);
+								// code for opening a parent widget
+								if (
+									widget.hasChild &&
+									!widget.isExpanded &&
+									widget.leftMoves === 0 &&
+									isMouseDown.current
+								) {
+									hoverTimer = setTimeout(() => {
+										if (widget.leftMoves === 0) {
+											widgetTree.expandNode(widget.ID);
+										}
+									}, minHoverTime);
+								}
 							},
 							onMouseLeave: () => {
 								setShowHoverFor(undefined);
+								// code for opening / closing a parent widget
+								clearTimeout(hoverTimer);
 							},
 							onMouseDown: () => {
 								setShowHoverFor(undefined);
