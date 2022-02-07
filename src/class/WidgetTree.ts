@@ -58,6 +58,11 @@ export class WidgetTree implements IWidgetTree {
 			}
 			return false;
 		});
+		// edge case - new sibling cannot be root or body
+		if (newSiblingWidget!.nodeLevel === 1) {
+			this.subject.next(this.widgets);
+			return widgetID;
+		}
 		if (currWidget!.nodeLevel - newSiblingWidget!.nodeLevel > 0) {
 			currWidget!.leftMoves =
 				currWidget!.nodeLevel - newSiblingWidget!.nodeLevel;
@@ -201,5 +206,18 @@ export class WidgetTree implements IWidgetTree {
 		});
 		// re-publish with updates
 		this.subject.next(this.widgets);
+	}
+	isAncestor(childID: string, parentID: string): boolean {
+		const childWidget = this.widgets.find((widget) => {
+			return widget.ID === childID;
+		});
+		if (childWidget?.parentID === parentID) {
+			return true;
+		}
+		if (childWidget?.parentID === "") {
+			return false;
+		} else {
+			return this.isAncestor(childWidget!.parentID, parentID);
+		}
 	}
 }

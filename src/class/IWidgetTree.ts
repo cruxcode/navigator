@@ -18,4 +18,5 @@ export interface IWidgetTree {
 	moveRight(widgetID: string, ticks: number): string;
 	moveLeft(widgetID: string, ticks: number): string;
 	setLeftMoves(widgetID: string, moves: number): void;
+	isAncestor(childID: string, parentID: string): boolean;
 }
