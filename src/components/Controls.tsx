@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { ControlIconProps } from "../class/ControlIconProps";
 import { spacing20, spacing25 } from "../consts";
 import { Underline } from "./Underline";
@@ -9,8 +9,8 @@ export interface ControlProps {
 		icon: React.FC<ControlIconProps>;
 		onClick: () => void;
 	}[];
-	onMouseEnter: () => void;
-	onMouseLeave: () => void;
+	onMouseEnter: MouseEventHandler;
+	onMouseLeave: MouseEventHandler;
 	background: string;
 	showLineColor: string;
 	opacity: string;

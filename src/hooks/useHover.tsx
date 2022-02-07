@@ -7,9 +7,9 @@ export const useHover = (
 ): [
 	(
 		| (WidgetTreeItem & {
-				onMouseEnter: () => void;
-				onMouseLeave: () => void;
-				onMouseDown: () => void;
+				onMouseEnter: MouseEventHandler;
+				onMouseLeave: MouseEventHandler;
+				onMouseDown: MouseEventHandler;
 				onMouseMove: MouseEventHandler;
 		  })[]
 	),
@@ -23,9 +23,9 @@ export const useHover = (
 	const isMouseDown = useRef<boolean>(false);
 	const [widgetsWithListeners, setWidgetsWithListeners] = useState<
 		(WidgetTreeItem & {
-			onMouseEnter: () => void;
-			onMouseLeave: () => void;
-			onMouseDown: () => void;
+			onMouseEnter: MouseEventHandler;
+			onMouseLeave: MouseEventHandler;
+			onMouseDown: MouseEventHandler;
 			onMouseMove: MouseEventHandler;
 		})[]
 	>([]);
@@ -50,10 +50,10 @@ export const useHover = (
 						let hoverTimer: any = undefined;
 						return {
 							...widget,
-							onMouseEnter: () => {
+							onMouseEnter: (event) => {
 								moveStartTime = undefined;
-								moveStartX = undefined;
-								moveStartY = undefined;
+								moveStartX = event.pageX;
+								moveStartY = event.pageY;
 								ticks = 0;
 								if (widget.leftMoves !== 0)
 									widgetTree.setLeftMoves(widget.ID, 0);
@@ -72,12 +72,12 @@ export const useHover = (
 									}, minHoverTime);
 								}
 							},
-							onMouseLeave: () => {
+							onMouseLeave: (_event) => {
 								setShowHoverFor(undefined);
 								// code for opening / closing a parent widget
 								clearTimeout(hoverTimer);
 							},
-							onMouseDown: () => {
+							onMouseDown: (_event) => {
 								setShowHoverFor(undefined);
 								setShowSelectedFor(widget.ID);
 								isMouseDown.current = true;
@@ -96,42 +96,72 @@ export const useHover = (
 								currStartX = event.pageX;
 								currStartY = event.pageY;
 								if (
-									timer === undefined &&
-									isMouseDown.current
+									moveStartX === undefined ||
+									moveStartY === undefined
 								) {
-									// reset
-									console.log("setting timer");
-									moveStartTime = currTime;
-									moveStartX = event.pageX;
-									moveStartY = event.pageY;
-									timer = setTimeout(() => {
-										// calculate slope
-										if (moveStartX! - currStartX! !== 0) {
-											if (
-												moveStartX! - currStartX! >
-												30
-											) {
-												ticks = ticks + 1;
-												widgetTree.moveLeft(
-													widget.ID,
-													ticks
-												);
-											}
-											if (
-												moveStartX! - currStartX! <
-													-30 &&
-												ticks > 0
-											) {
-												ticks = ticks - 1;
-												widgetTree.moveLeft(
-													widget.ID,
-													ticks
-												);
-											}
-										}
-										timer = undefined;
-									}, timeLimit);
+									console.log("resetting moveStartX");
+									moveStartX = currStartX;
+									moveStartY = currStartY;
 								}
+								if (moveStartX! - currStartX! !== 0) {
+									if (moveStartX! - currStartX! > 30) {
+										ticks = ticks + 1;
+										widgetTree.moveLeft(widget.ID, ticks);
+									}
+									if (
+										moveStartX! - currStartX! < -30 &&
+										ticks > 0
+									) {
+										ticks = ticks - 1;
+										widgetTree.moveLeft(widget.ID, ticks);
+									}
+									// edge case
+									// someone goes right first and then start going left
+									if (
+										moveStartX! - currStartX! < 0 &&
+										ticks === 0
+									) {
+										moveStartX = currStartX;
+										moveStartY = currStartY;
+									}
+								}
+								// if (
+								// 	timer === undefined &&
+								// 	isMouseDown.current
+								// ) {
+								// 	// reset
+								// 	console.log("setting timer");
+								// 	moveStartTime = currTime;
+								// 	moveStartX = event.pageX;
+								// 	moveStartY = event.pageY;
+								// 	timer = setTimeout(() => {
+								// 		// calculate slope
+								// 		if (moveStartX! - currStartX! !== 0) {
+								// 			if (
+								// 				moveStartX! - currStartX! >
+								// 				30
+								// 			) {
+								// 				ticks = ticks + 1;
+								// 				widgetTree.moveLeft(
+								// 					widget.ID,
+								// 					ticks
+								// 				);
+								// 			}
+								// 			if (
+								// 				moveStartX! - currStartX! <
+								// 					-30 &&
+								// 				ticks > 0
+								// 			) {
+								// 				ticks = ticks - 1;
+								// 				widgetTree.moveLeft(
+								// 					widget.ID,
+								// 					ticks
+								// 				);
+								// 			}
+								// 		}
+								// 		timer = undefined;
+								// 	}, timeLimit);
+								// }
 							},
 						};
 					})

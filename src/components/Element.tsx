@@ -6,9 +6,9 @@ export interface ElementProps {
 	icon: React.FC<any>;
 	name: string;
 	leftMargin: string;
-	onMouseEnter: () => void;
-	onMouseLeave: () => void;
-	onMouseDown: () => void;
+	onMouseEnter: MouseEventHandler;
+	onMouseLeave: MouseEventHandler;
+	onMouseDown: MouseEventHandler;
 	onMouseMove: MouseEventHandler;
 	background: string;
 	showLineColor: string;

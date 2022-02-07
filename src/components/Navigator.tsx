@@ -77,7 +77,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	);
 	const getBackground = useCallback(
 		(widgetID: string) => {
-			return showHoverFor === widgetID && showSelectedFor === undefined
+			return showHoverFor === widgetID
 				? gray800Hover
 				: showSelectedFor === widgetID
 				? gray800
