@@ -1,5 +1,6 @@
 import React, { MouseEventHandler } from "react";
 import { spacing10, spacing25 } from "../consts";
+import { Border } from "./Border";
 import { Underline } from "./Underline";
 
 export interface ElementProps {
@@ -15,6 +16,7 @@ export interface ElementProps {
 	opacity: string;
 	leftLinePadding: string;
 	leftMoves: string;
+	showThreeSidedBorder: boolean;
 }
 
 export const style: { [key: string]: React.CSSProperties } = {
@@ -65,6 +67,16 @@ export const Element: React.FC<ElementProps> = React.memo((props) => {
 				width={`calc(100% - ${props.leftMargin} - ${props.leftLinePadding} + ${props.leftMoves})`}
 				left={`calc(${props.leftMargin} + ${props.leftLinePadding} - ${props.leftMoves})`}
 			/>
+			{props.showThreeSidedBorder ? (
+				<Border
+					left={true}
+					top={true}
+					bottom={true}
+					right={false}
+					leftMargin={props.leftMargin}
+					rightMargin={"0px"}
+				/>
+			) : null}
 		</div>
 	);
 });

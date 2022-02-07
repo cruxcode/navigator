@@ -67,10 +67,13 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	const getLineColor = useCallback(
 		(widgetID: string) => {
 			// showSelectedFor and showHoverFor should not be in parent-child path
-			return showHoverFor === widgetID &&
+			return showHoverFor?.ID === widgetID &&
 				showSelectedFor &&
 				showHoverFor !== showSelectedFor
-				? props.widgetTree.isAncestor(showHoverFor, showSelectedFor)
+				? props.widgetTree.isAncestor(
+						showHoverFor.ID,
+						showSelectedFor.ID
+				  )
 					? pink700
 					: amber300
 				: "";
@@ -79,9 +82,9 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	);
 	const getBackground = useCallback(
 		(widgetID: string) => {
-			return showHoverFor === widgetID
+			return showHoverFor?.ID === widgetID
 				? gray800Hover
-				: showSelectedFor === widgetID
+				: showSelectedFor?.ID === widgetID
 				? gray800
 				: "";
 		},
@@ -89,7 +92,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	);
 	const reduceOpacity = useCallback(
 		(widgetID: string) => {
-			return showSelectedFor === widgetID ? "0.5" : "1";
+			return showSelectedFor?.ID === widgetID ? "0.5" : "1";
 		},
 		[showHoverFor, showSelectedFor]
 	);
@@ -110,6 +113,18 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	}, []);
 	const getLeftMoves = (moves: number) => {
 		return `calc(${spacing20}*${moves})`;
+	};
+	const showThreeSidedBorder = (widget: WidgetTreeItem): boolean => {
+		if (showHoverFor) {
+			const atLevel = showHoverFor.leftMoves + 1;
+			const parentWidget = props.widgetTree.getParentAtLevel(
+				showHoverFor.ID,
+				atLevel
+			);
+			console.log("setting true", parentWidget);
+			return parentWidget.ID === widget.ID;
+		}
+		return false;
 	};
 	return (
 		<div style={styles.navigator}>
@@ -143,6 +158,9 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 											opacity={reduceOpacity(widget.ID)}
 											leftMoves={getLeftMoves(
 												widget.leftMoves
+											)}
+											showThreeSidedBorder={showThreeSidedBorder(
+												widget
 											)}
 										></Element>
 									</div>
@@ -182,6 +200,9 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 										background={getBackground(widget.ID)}
 										showLineColor={getLineColor(widget.ID)}
 										opacity={reduceOpacity(widget.ID)}
+										showThreeSidedBorder={showThreeSidedBorder(
+											widget
+										)}
 									/>
 								);
 							else return null;

@@ -13,12 +13,14 @@ export const useHover = (
 				onMouseMove: MouseEventHandler;
 		  })[]
 	),
-	string | undefined,
-	string | undefined
+	WidgetTreeItem | undefined,
+	WidgetTreeItem | undefined
 ] => {
-	const [showHoverFor, setShowHoverFor] = useState<string | undefined>();
+	const [showHoverFor, setShowHoverFor] = useState<
+		WidgetTreeItem | undefined
+	>();
 	const [showSelectedFor, setShowSelectedFor] = useState<
-		string | undefined
+		WidgetTreeItem | undefined
 	>();
 	const isMouseDown = useRef<boolean>(false);
 	const [widgetsWithListeners, setWidgetsWithListeners] = useState<
@@ -57,7 +59,7 @@ export const useHover = (
 								ticks = 0;
 								if (widget.leftMoves !== 0)
 									widgetTree.setLeftMoves(widget.ID, 0);
-								setShowHoverFor(widget.ID);
+								setShowHoverFor(widget);
 								// code for opening a parent widget
 								if (
 									widget.hasChild &&
@@ -79,7 +81,7 @@ export const useHover = (
 							},
 							onMouseDown: (_event) => {
 								setShowHoverFor(undefined);
-								setShowSelectedFor(widget.ID);
+								setShowSelectedFor(widget);
 								isMouseDown.current = true;
 								const upListener = () => {
 									setShowSelectedFor(undefined);

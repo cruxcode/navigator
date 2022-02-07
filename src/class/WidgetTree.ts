@@ -220,4 +220,24 @@ export class WidgetTree implements IWidgetTree {
 			return this.isAncestor(childWidget!.parentID, parentID);
 		}
 	}
+	private _getParentAtLevel(
+		childWidget: WidgetTreeItem,
+		atLevel: number
+	): WidgetTreeItem {
+		if (atLevel === 0) return childWidget;
+		const parentWidget = this.widgets.find((widget) => {
+			return widget.ID === childWidget.parentID;
+		});
+		if (parentWidget?.nodeLevel === 0) {
+			return parentWidget;
+		}
+		return this._getParentAtLevel(parentWidget!, atLevel - 1);
+	}
+	getParentAtLevel(childID: string, atLevel: number): WidgetTreeItem {
+		const childWidget = this.widgets.find((widget) => {
+			return widget.ID === childID;
+		});
+		if (childWidget?.nodeLevel === 1) return childWidget;
+		return this._getParentAtLevel(childWidget!, atLevel);
+	}
 }

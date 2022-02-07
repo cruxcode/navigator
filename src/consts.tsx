@@ -11,3 +11,4 @@ export const gray700 = "#374151";
 export const gray300 = "#D1D5DB";
 export const amber300 = "#FCD34D";
 export const pink700 = "#BE185D";
+export const sky400 = "#38BDF8";

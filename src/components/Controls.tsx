@@ -1,6 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import { ControlIconProps } from "../class/ControlIconProps";
-import { spacing20, spacing25 } from "../consts";
+import { spacing10, spacing20, spacing25 } from "../consts";
+import { Border } from "./Border";
 import { Underline } from "./Underline";
 
 export interface ControlProps {
@@ -14,6 +15,7 @@ export interface ControlProps {
 	background: string;
 	showLineColor: string;
 	opacity: string;
+	showThreeSidedBorder: boolean;
 }
 
 const styles: { [key: string]: React.CSSProperties } = {
@@ -52,6 +54,16 @@ export const Controls: React.FC<ControlProps> = React.memo((props) => {
 				width={`calc(100% + ${spacing20})`}
 				left="0px"
 			/>
+			{props.showThreeSidedBorder ? (
+				<Border
+					left={false}
+					top={true}
+					bottom={true}
+					right={true}
+					leftMargin={"0px"}
+					rightMargin={spacing20}
+				/>
+			) : null}
 		</div>
 	);
 });
