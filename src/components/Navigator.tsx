@@ -5,6 +5,7 @@ import {
 	gray700,
 	gray800,
 	gray800Hover,
+	pink700,
 	spacing20,
 } from "../consts";
 import { Header } from "./Header";
@@ -68,9 +69,10 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 			// showSelectedFor and showHoverFor should not be in parent-child path
 			return showHoverFor === widgetID &&
 				showSelectedFor &&
-				showHoverFor !== showSelectedFor &&
-				!props.widgetTree.isAncestor(showHoverFor, showSelectedFor)
-				? amber300
+				showHoverFor !== showSelectedFor
+				? props.widgetTree.isAncestor(showHoverFor, showSelectedFor)
+					? pink700
+					: amber300
 				: "";
 		},
 		[showHoverFor, showSelectedFor]
