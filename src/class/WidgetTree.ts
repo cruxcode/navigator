@@ -28,11 +28,53 @@ export class WidgetTree implements IWidgetTree {
 		if (widget?.isLastChild) {
 			return this._moveLeft(widget.parentID, ticks - 1);
 		}
-		return widgetID;
+		return widget!.ID;
 	}
 	moveLeft(widgetID: string, ticks: number): string {
-		console.log("moving left with ticks", ticks, widgetID);
-		return this._moveLeft(widgetID, ticks);
+		console.log("move left called");
+		const currWidget = this.widgets.find((widget) => {
+			if (widget.ID === widgetID) {
+				return true;
+			}
+			return false;
+		});
+		// edge case
+		if (ticks === 0) {
+			currWidget!.leftMoves = 0;
+			this.subject.next(this.widgets);
+			return currWidget!.ID;
+		}
+		// edge case
+		if (currWidget?.hasChild && currWidget.isExpanded) {
+			currWidget!.leftMoves = 0;
+			this.subject.next(this.widgets);
+			return currWidget!.ID;
+		}
+		const newSibling = this._moveLeft(widgetID, ticks);
+		console.log("move left with ticks", ticks, newSibling);
+		const newSiblingWidget = this.widgets.find((widget) => {
+			if (widget.ID === newSibling) {
+				return true;
+			}
+			return false;
+		});
+		if (currWidget!.nodeLevel - newSiblingWidget!.nodeLevel > 0) {
+			currWidget!.leftMoves =
+				currWidget!.nodeLevel - newSiblingWidget!.nodeLevel;
+			console.log(currWidget!.leftMoves);
+			this.subject.next(this.widgets);
+		}
+		return newSiblingWidget!.ID;
+	}
+	setLeftMoves(widgetID: string, moves: number) {
+		const currWidget = this.widgets.find((widget) => {
+			if (widget.ID === widgetID) {
+				return true;
+			}
+			return false;
+		});
+		currWidget!.leftMoves = 0;
+		this.subject.next(this.widgets);
 	}
 	get widgets() {
 		return this.subject.value;
@@ -52,6 +94,7 @@ export class WidgetTree implements IWidgetTree {
 				isExpanded: true,
 				shouldDisplay: true,
 				isLastChild: false,
+				leftMoves: 0,
 			},
 			{
 				name: "Div Block 1",
@@ -63,6 +106,7 @@ export class WidgetTree implements IWidgetTree {
 				isExpanded: true,
 				shouldDisplay: true,
 				isLastChild: true,
+				leftMoves: 0,
 			},
 			{
 				name: "Text Block 1",
@@ -74,6 +118,7 @@ export class WidgetTree implements IWidgetTree {
 				isExpanded: false,
 				shouldDisplay: true,
 				isLastChild: false,
+				leftMoves: 0,
 			},
 			{
 				name: "Div Block 2",
@@ -85,6 +130,7 @@ export class WidgetTree implements IWidgetTree {
 				isExpanded: true,
 				shouldDisplay: true,
 				isLastChild: true,
+				leftMoves: 0,
 			},
 			{
 				name: "Text Block 3",
@@ -96,6 +142,7 @@ export class WidgetTree implements IWidgetTree {
 				isExpanded: false,
 				shouldDisplay: true,
 				isLastChild: true,
+				leftMoves: 0,
 			},
 		];
 		const parentChildMap = {

@@ -15,4 +15,5 @@ export type WidgetTreeItem = {
 	isExpanded: boolean;
 	shouldDisplay: boolean;
 	isLastChild: boolean;
+	leftMoves: number;
 };

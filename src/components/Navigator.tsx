@@ -52,7 +52,7 @@ const styles: { [key: string]: React.CSSProperties } = {
 };
 
 function calcSpacing(tabs: number) {
-	return parseFloat(spacing20) * tabs + "rem";
+	return `calc(${spacing20} * ${tabs})`;
 }
 
 export interface NavigatorProps {
@@ -100,6 +100,9 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 		}
 		return ClosedIcon;
 	}, []);
+	const getLeftMoves = (moves: number) => {
+		return `calc(${spacing20}*${moves})`;
+	};
 	return (
 		<div style={styles.navigator}>
 			<Header />
@@ -130,6 +133,9 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 												widget.ID
 											)}
 											opacity={reduceOpacity(widget.ID)}
+											leftMoves={getLeftMoves(
+												widget.leftMoves
+											)}
 										></Element>
 									</div>
 								);

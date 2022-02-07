@@ -17,4 +17,5 @@ export interface IWidgetTree {
 	 */
 	moveRight(widgetID: string, ticks: number): string;
 	moveLeft(widgetID: string, ticks: number): string;
+	setLeftMoves(widgetID: string, moves: number): void;
 }

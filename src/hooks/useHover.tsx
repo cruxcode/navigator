@@ -1,4 +1,4 @@
-import { useEffect, useState, MouseEventHandler } from "react";
+import { useEffect, useState, MouseEventHandler, useRef } from "react";
 import { IWidgetTree } from "../class/IWidgetTree";
 import { WidgetTreeItem } from "../components/WidgetTreeItem";
 
@@ -20,6 +20,7 @@ export const useHover = (
 	const [showSelectedFor, setShowSelectedFor] = useState<
 		string | undefined
 	>();
+	const isMouseDown = useRef<boolean>(false);
 	const [widgetsWithListeners, setWidgetsWithListeners] = useState<
 		(WidgetTreeItem & {
 			onMouseEnter: () => void;
@@ -42,14 +43,16 @@ export const useHover = (
 						let moveStartY: number | undefined;
 						let currStartX: number | undefined;
 						let currStartY: number | undefined;
-						let ticks: number = 0;
+						let ticks: number = widget.leftMoves;
 						return {
 							...widget,
 							onMouseEnter: () => {
+								console.log("mouseEnter called");
 								moveStartTime = undefined;
 								moveStartX = undefined;
 								moveStartY = undefined;
 								ticks = 0;
+								widgetTree.setLeftMoves(widget.ID, 0);
 								setShowHoverFor(widget.ID);
 							},
 							onMouseLeave: () => {
@@ -58,8 +61,10 @@ export const useHover = (
 							onMouseDown: () => {
 								setShowHoverFor(undefined);
 								setShowSelectedFor(widget.ID);
+								isMouseDown.current = true;
 								const upListener = () => {
 									setShowSelectedFor(undefined);
+									isMouseDown.current = false;
 									window.removeEventListener(
 										"mouseup",
 										upListener
@@ -71,27 +76,21 @@ export const useHover = (
 								const currTime = new Date();
 								currStartX = event.pageX;
 								currStartY = event.pageY;
-								if (timer === undefined) {
+								if (
+									timer === undefined &&
+									isMouseDown.current
+								) {
 									// reset
+									console.log("setting timer");
 									moveStartTime = currTime;
 									moveStartX = event.pageX;
 									moveStartY = event.pageY;
 									timer = setTimeout(() => {
 										// calculate slope
 										if (moveStartX! - currStartX! !== 0) {
-											// console.log("calculating slope");
-											// const slope =
-											// 	Math.abs(
-											// 		moveStartY! - currStartY!
-											// 	) /
-											// 	(moveStartX! - currStartX!);
-											// console.log(slope);
 											if (
 												moveStartX! - currStartX! >
 												30
-												// 	&&
-												// slope <= 0.5 &&
-												// slope > 0
 											) {
 												ticks = ticks + 1;
 												widgetTree.moveLeft(
@@ -120,6 +119,11 @@ export const useHover = (
 				);
 			},
 		});
-	}, [setShowHoverFor, setWidgetsWithListeners, setShowSelectedFor]);
+	}, [
+		setShowHoverFor,
+		setWidgetsWithListeners,
+		setShowSelectedFor,
+		isMouseDown,
+	]);
 	return [widgetsWithListeners, showHoverFor, showSelectedFor];
 };

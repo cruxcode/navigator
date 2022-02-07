@@ -1,6 +1,7 @@
 export interface UnderlineProps {
 	showLineColor: string;
 	width: string;
+	left: string;
 }
 export const style: { [key: string]: React.CSSProperties } = {
 	line: {
@@ -18,6 +19,7 @@ export const Underline: React.FC<UnderlineProps> = (props) => {
 				...style.line,
 				background: props.showLineColor,
 				width: props.width,
+				left: props.left,
 			}}
 		></div>
 	);
