@@ -6,7 +6,7 @@ export interface IWidgetTree {
 	subscribeWidgetTree(
 		observer: Partial<Observer<WidgetTreeItem[]>>
 	): Subscription;
-	rewire(widgetID: string, parentID: string): void;
+	rewire(hoveredID: string, selectedID: string): void;
 	expandNode(widgetID: string): void;
 	unexpandNode(widgetID: string): void;
 	/**

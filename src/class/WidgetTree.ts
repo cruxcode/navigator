@@ -162,9 +162,10 @@ export class WidgetTree implements IWidgetTree {
 		return this.subject.subscribe(observer);
 	}
 	// rewiring node from one point to another
-	rewire(widgetID: string, parentID: string) {
+	rewire(hoveredID: string, selectedID: string) {
 		// TODO: call DesignRuntime.rewire
 		// remove below code once connected with DesignRuntime
+		// use the hovered widget details and selected widget details to figure out re-wiring details
 		console.error("rewire not implemented");
 	}
 	private _markDisplay(widgetID: string, value: boolean) {
