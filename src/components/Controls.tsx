@@ -40,7 +40,12 @@ export const Controls: React.FC<ControlProps> = React.memo((props) => {
 			}}
 		>
 			{props.controls.map((control) => {
-				return <control.icon onClick={control.onClick} />;
+				return (
+					<control.icon
+						onClick={control.onClick}
+						key={control.name}
+					/>
+				);
 			})}
 			<Underline
 				showLineColor={props.showLineColor}

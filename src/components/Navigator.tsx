@@ -109,7 +109,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 						{widgetsWithListeners.map((widget) => {
 							if (widget.shouldDisplay)
 								return (
-									<div>
+									<div key={widget.ID}>
 										<Element
 											name={widget.name}
 											icon={widget.icon}
@@ -120,7 +120,6 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 											onMouseLeave={widget.onMouseLeave}
 											onMouseDown={widget.onMouseDown}
 											onMouseMove={widget.onMouseMove}
-											key={widget.ID}
 											showLineColor={getLineColor(
 												widget.ID
 											)}
