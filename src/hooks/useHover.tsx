@@ -52,7 +52,8 @@ export const useHover = (
 								moveStartX = undefined;
 								moveStartY = undefined;
 								ticks = 0;
-								widgetTree.setLeftMoves(widget.ID, 0);
+								if (widget.leftMoves !== 0)
+									widgetTree.setLeftMoves(widget.ID, 0);
 								setShowHoverFor(widget.ID);
 							},
 							onMouseLeave: () => {

@@ -74,6 +74,8 @@ export class WidgetTree implements IWidgetTree {
 			return false;
 		});
 		currWidget!.leftMoves = 0;
+		// TODO: causes re-rendering on mouse enter
+		// prevent re-rendering
 		this.subject.next(this.widgets);
 	}
 	get widgets() {

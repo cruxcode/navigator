@@ -65,6 +65,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	);
 	const getLineColor = useCallback(
 		(widgetID: string) => {
+			// showSelectedFor and showHoverFor should not be in parent-child path
 			return showHoverFor === widgetID && showSelectedFor ? amber300 : "";
 		},
 		[showHoverFor, showSelectedFor]
