@@ -49,11 +49,6 @@ export const Controls: React.FC<ControlProps> = React.memo((props) => {
 					/>
 				);
 			})}
-			<Underline
-				showLineColor={props.showLineColor}
-				width={`calc(100% + ${spacing20})`}
-				left="0px"
-			/>
 			{props.showThreeSidedBorder ? (
 				<Border
 					left={false}
@@ -64,6 +59,11 @@ export const Controls: React.FC<ControlProps> = React.memo((props) => {
 					rightMargin={spacing20}
 				/>
 			) : null}
+			<Underline
+				showLineColor={props.showLineColor}
+				width={`calc(100% + ${spacing20})`}
+				left="0px"
+			/>
 		</div>
 	);
 });

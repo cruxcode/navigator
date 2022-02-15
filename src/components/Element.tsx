@@ -62,11 +62,6 @@ export const Element: React.FC<ElementProps> = React.memo((props) => {
 				<props.icon />
 			</div>
 			<div style={style.name}>{props.name}</div>
-			<Underline
-				showLineColor={props.showLineColor}
-				width={`calc(100% - ${props.leftMargin} - ${props.leftLinePadding} + ${props.leftMoves})`}
-				left={`calc(${props.leftMargin} + ${props.leftLinePadding} - ${props.leftMoves})`}
-			/>
 			{props.showThreeSidedBorder ? (
 				<Border
 					left={true}
@@ -77,6 +72,11 @@ export const Element: React.FC<ElementProps> = React.memo((props) => {
 					rightMargin={"0px"}
 				/>
 			) : null}
+			<Underline
+				showLineColor={props.showLineColor}
+				width={`calc(100% - ${props.leftMargin} - ${props.leftLinePadding} + ${props.leftMoves})`}
+				left={`calc(${props.leftMargin} + ${props.leftLinePadding} - ${props.leftMoves})`}
+			/>
 		</div>
 	);
 });

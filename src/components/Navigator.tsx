@@ -116,10 +116,13 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	};
 	const showThreeSidedBorder = (widget: WidgetTreeItem): boolean => {
 		if (showHoverFor) {
-			const atLevel = showHoverFor.leftMoves + 1;
+			if (showHoverFor.hasChild && showHoverFor.isExpanded) {
+				return showHoverFor.ID === widget.ID;
+			}
+			let parentLevel = showHoverFor.leftMoves + 1;
 			const parentWidget = props.widgetTree.getParentAtLevel(
 				showHoverFor.ID,
-				atLevel
+				parentLevel
 			);
 			console.log("setting true", parentWidget);
 			return parentWidget.ID === widget.ID;
