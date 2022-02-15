@@ -130,7 +130,6 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 				showHoverFor.ID,
 				parentLevel
 			);
-			console.log("setting true", parentWidget);
 			return parentWidget.ID === widget.ID;
 		}
 		return false;
