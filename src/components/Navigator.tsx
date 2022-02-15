@@ -16,6 +16,7 @@ import { DropIcon } from "./DropIcon";
 import { WidgetTreeItem } from "./WidgetTreeItem";
 import { IWidgetTree } from "../class/IWidgetTree";
 import { ClosedIcon } from "./ClosedIcon";
+import { Footer } from "./Footer";
 
 const maxControlsWidth = "40px";
 
@@ -29,8 +30,13 @@ const styles: { [key: string]: React.CSSProperties } = {
 		userSelect: "none",
 		height: "100%",
 		background: gray700,
+		overflow: "hidden",
 		// TO BE REMOVED
 		width: "15rem", // width: 100%
+	},
+	scrollable: {
+		height: "100%",
+		overflow: "auto",
 	},
 	main: {
 		display: "flex",
@@ -132,87 +138,100 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 	return (
 		<div style={styles.navigator}>
 			<Header />
-			{widgetsWithListeners ? (
-				<div style={styles.main}>
-					<div style={styles.elements}>
-						{widgetsWithListeners.map((widget) => {
-							if (widget.shouldDisplay)
-								return (
-									<div key={widget.ID}>
-										<Element
-											name={widget.name}
-											icon={widget.icon}
-											leftMargin={calcSpacing(
-												widget.nodeLevel
-											)}
+			<div style={styles.scrollable}>
+				{widgetsWithListeners ? (
+					<div style={styles.main}>
+						<div style={styles.elements}>
+							{widgetsWithListeners.map((widget) => {
+								if (widget.shouldDisplay)
+									return (
+										<div key={widget.ID}>
+											<Element
+												name={widget.name}
+												icon={widget.icon}
+												leftMargin={calcSpacing(
+													widget.nodeLevel
+												)}
+												onMouseEnter={
+													widget.onMouseEnter
+												}
+												onMouseLeave={
+													widget.onMouseLeave
+												}
+												onMouseDown={widget.onMouseDown}
+												onMouseMove={widget.onMouseMove}
+												showLineColor={getLineColor(
+													widget.ID
+												)}
+												leftLinePadding={getLinePadding(
+													widget
+												)}
+												background={getBackground(
+													widget.ID
+												)}
+												opacity={reduceOpacity(
+													widget.ID
+												)}
+												leftMoves={getLeftMoves(
+													widget.leftMoves
+												)}
+												showThreeSidedBorder={showThreeSidedBorder(
+													widget
+												)}
+											></Element>
+										</div>
+									);
+								else return null;
+							})}
+						</div>
+						<div style={styles.controls}>
+							{widgetsWithListeners.map((widget) => {
+								if (widget.shouldDisplay)
+									return (
+										<Controls
+											controls={
+												widget.hasChild
+													? [
+															{
+																name: "drop",
+																icon: getIcon(
+																	widget
+																),
+																onClick: () => {
+																	widget.isExpanded
+																		? props.widgetTree.unexpandNode(
+																				widget.ID
+																		  )
+																		: props.widgetTree.expandNode(
+																				widget.ID
+																		  );
+																},
+															},
+													  ]
+													: []
+											}
+											key={widget.ID}
 											onMouseEnter={widget.onMouseEnter}
 											onMouseLeave={widget.onMouseLeave}
-											onMouseDown={widget.onMouseDown}
-											onMouseMove={widget.onMouseMove}
-											showLineColor={getLineColor(
-												widget.ID
-											)}
-											leftLinePadding={getLinePadding(
-												widget
-											)}
 											background={getBackground(
 												widget.ID
 											)}
-											opacity={reduceOpacity(widget.ID)}
-											leftMoves={getLeftMoves(
-												widget.leftMoves
+											showLineColor={getLineColor(
+												widget.ID
 											)}
+											opacity={reduceOpacity(widget.ID)}
 											showThreeSidedBorder={showThreeSidedBorder(
 												widget
 											)}
-										></Element>
-									</div>
-								);
-							else return null;
-						})}
+										/>
+									);
+								else return null;
+							})}
+						</div>
 					</div>
-					<div style={styles.controls}>
-						{widgetsWithListeners.map((widget) => {
-							if (widget.shouldDisplay)
-								return (
-									<Controls
-										controls={
-											widget.hasChild
-												? [
-														{
-															name: "drop",
-															icon: getIcon(
-																widget
-															),
-															onClick: () => {
-																widget.isExpanded
-																	? props.widgetTree.unexpandNode(
-																			widget.ID
-																	  )
-																	: props.widgetTree.expandNode(
-																			widget.ID
-																	  );
-															},
-														},
-												  ]
-												: []
-										}
-										key={widget.ID}
-										onMouseEnter={widget.onMouseEnter}
-										onMouseLeave={widget.onMouseLeave}
-										background={getBackground(widget.ID)}
-										showLineColor={getLineColor(widget.ID)}
-										opacity={reduceOpacity(widget.ID)}
-										showThreeSidedBorder={showThreeSidedBorder(
-											widget
-										)}
-									/>
-								);
-							else return null;
-						})}
-					</div>
-				</div>
-			) : null}
+				) : null}
+				<Footer />
+			</div>
 		</div>
 	);
 };
