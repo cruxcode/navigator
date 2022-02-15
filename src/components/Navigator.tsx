@@ -121,7 +121,7 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 		return `calc(${spacing20}*${moves})`;
 	};
 	const showThreeSidedBorder = (widget: WidgetTreeItem): boolean => {
-		if (showHoverFor) {
+		if (showHoverFor && showSelectedFor) {
 			if (showHoverFor.hasChild && showHoverFor.isExpanded) {
 				return showHoverFor.ID === widget.ID;
 			}
