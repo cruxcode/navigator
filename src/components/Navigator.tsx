@@ -134,8 +134,17 @@ export const Navigator: React.FC<NavigatorProps> = (props) => {
 		}
 		return false;
 	};
+	const mouseUpListener = useCallback(() => {
+		if (
+			showHoverFor &&
+			showSelectedFor &&
+			!props.widgetTree.isAncestor(showHoverFor.ID, showSelectedFor.ID)
+		) {
+			props.widgetTree.rewire(showHoverFor.ID, showSelectedFor.ID);
+		}
+	}, [showHoverFor, showSelectedFor]);
 	return (
-		<div style={styles.navigator}>
+		<div style={styles.navigator} onMouseUp={mouseUpListener}>
 			<Header />
 			<div style={styles.scrollable}>
 				{widgetsWithListeners ? (

@@ -9,6 +9,6 @@ const styles: { [key: string]: React.CSSProperties } = {
 	},
 };
 
-export const Footer: React.FC<FooterProps> = (props) => {
+export const Footer: React.FC<FooterProps> = React.memo((props) => {
 	return <div style={styles.container}></div>;
-};
+});

@@ -36,11 +36,6 @@ export const useHover = (
 			next: (widgets) => {
 				setWidgetsWithListeners(
 					widgets.map((widget) => {
-						const timeLimit = 200; // in milliseconds
-						// timer is also used as a flag to start a new timer
-						// timer if undefined
-						let timer: any;
-						let moveStartTime: Date | undefined;
 						let moveStartX: number | undefined;
 						let moveStartY: number | undefined;
 						let currStartX: number | undefined;
@@ -53,7 +48,6 @@ export const useHover = (
 						return {
 							...widget,
 							onMouseEnter: (event) => {
-								moveStartTime = undefined;
 								moveStartX = event.pageX;
 								moveStartY = event.pageY;
 								ticks = 0;
@@ -94,7 +88,6 @@ export const useHover = (
 								window.addEventListener("mouseup", upListener);
 							},
 							onMouseMove: (event) => {
-								const currTime = new Date();
 								currStartX = event.pageX;
 								currStartY = event.pageY;
 								if (
@@ -127,43 +120,6 @@ export const useHover = (
 										moveStartY = currStartY;
 									}
 								}
-								// if (
-								// 	timer === undefined &&
-								// 	isMouseDown.current
-								// ) {
-								// 	// reset
-								// 	console.log("setting timer");
-								// 	moveStartTime = currTime;
-								// 	moveStartX = event.pageX;
-								// 	moveStartY = event.pageY;
-								// 	timer = setTimeout(() => {
-								// 		// calculate slope
-								// 		if (moveStartX! - currStartX! !== 0) {
-								// 			if (
-								// 				moveStartX! - currStartX! >
-								// 				30
-								// 			) {
-								// 				ticks = ticks + 1;
-								// 				widgetTree.moveLeft(
-								// 					widget.ID,
-								// 					ticks
-								// 				);
-								// 			}
-								// 			if (
-								// 				moveStartX! - currStartX! <
-								// 					-30 &&
-								// 				ticks > 0
-								// 			) {
-								// 				ticks = ticks - 1;
-								// 				widgetTree.moveLeft(
-								// 					widget.ID,
-								// 					ticks
-								// 				);
-								// 			}
-								// 		}
-								// 		timer = undefined;
-								// 	}, timeLimit);
-								// }
 							},
 						};
 					})

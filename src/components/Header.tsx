@@ -12,6 +12,6 @@ export const style: { [key: string]: React.CSSProperties } = {
 	},
 };
 
-export const Header: React.FC = () => {
+export const Header: React.FC = React.memo(() => {
 	return <div style={style.header}>Navigator</div>;
-};
+});
