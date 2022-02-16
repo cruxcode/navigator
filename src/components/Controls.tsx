@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react";
-import { ControlIconProps } from "../class/ControlIconProps";
+import { ControlIconProps } from "../types/ControlIconProps";
 import { spacing10, spacing20, spacing25 } from "../consts";
 import { Border } from "./Border";
 import { Underline } from "./Underline";

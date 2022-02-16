@@ -1,4 +1,4 @@
-import { ControlIconProps } from "../class/ControlIconProps";
+import { ControlIconProps } from "../types/ControlIconProps";
 
 export const ClosedIcon: React.FC<ControlIconProps> = (props) => {
 	return (

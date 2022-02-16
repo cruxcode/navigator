@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEventHandler, useRef } from "react";
-import { IWidgetTree } from "../class/IWidgetTree";
+import { IWidgetTree } from "../types/IWidgetTree";
 import { WidgetTreeItem } from "../components/WidgetTreeItem";
 
 export const useHover = (

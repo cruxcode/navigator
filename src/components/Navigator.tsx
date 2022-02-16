@@ -14,7 +14,7 @@ import { Controls } from "./Controls";
 import { useHover } from "../hooks/useHover";
 import { DropIcon } from "./DropIcon";
 import { WidgetTreeItem } from "./WidgetTreeItem";
-import { IWidgetTree } from "../class/IWidgetTree";
+import { IWidgetTree } from "../types/IWidgetTree";
 import { ClosedIcon } from "./ClosedIcon";
 import { Footer } from "./Footer";
 

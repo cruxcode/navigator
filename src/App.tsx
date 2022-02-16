@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import "./App.css";
-import { WidgetTree } from "./class/WidgetTree";
+import { WidgetTree } from "./types/WidgetTree";
 import { Navigator } from "./components/Navigator";
 
 function App() {
